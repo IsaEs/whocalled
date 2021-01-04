@@ -1,8 +1,8 @@
 package com.isaes.whocalled.controller;
 
-import com.isaes.whocalled.model.doa.CallDetailRecord;
+import com.isaes.whocalled.model.dao.CallDetailRecord;
 
-import com.isaes.whocalled.model.doa.User;
+import com.isaes.whocalled.model.dao.User;
 import com.isaes.whocalled.model.dto.PreferenceModel;
 import com.isaes.whocalled.model.dto.RingModel;
 import com.isaes.whocalled.repository.CallDetailRepository;
@@ -29,17 +29,19 @@ public class UserController {
 
     @PostMapping("/ring")
     public ResponseEntity<?> ringNumber(Principal principal,@RequestBody RingModel requestBody) throws Exception {
-        log.info(requestBody.toString());
-        log.info(principal.getName());
-        //TODO if checks
+        log.info("Number {} requested for call : {}",principal.getName(),requestBody.toString());
         CallDetailRecord callDetailRecord = new CallDetailRecord();
-        callDetailRecord.setCallerNo(principal.getName());
-        callDetailRecord.setDialedNumber(requestBody.getDialedNumber());
-        callDetailRecord.setNumberOfRings(requestBody.getNumberOfRings());
-        callDetailRecord.setLastCallTime(requestBody.getLastCallTime());
-        callDetailRecord.setIsDialedNumberNotified(false);
-        callDetailRepository.save(callDetailRecord);
-        return ResponseEntity.ok("Saved");
+        User user = userRepository.findByPhoneNo(requestBody.getDialedNumber());
+        if(null!=requestBody.getDialedNumber() && null != user){
+            //TODO field validations
+            callDetailRecord.setCallerNo(principal.getName());
+            callDetailRecord.setDialedNumber(requestBody.getDialedNumber());
+            callDetailRecord.setNumberOfRings(requestBody.getNumberOfRings());
+            callDetailRecord.setLastCallTime(requestBody.getLastCallTime());
+            callDetailRecord.setIsDialedNumberNotified(false);
+            return ResponseEntity.ok(callDetailRepository.save(callDetailRecord));
+        }
+        return ResponseEntity.status(409).body("There is no such user.");
     }
 
     @PutMapping("/phone")
@@ -55,12 +57,13 @@ public class UserController {
         } catch (DataIntegrityViolationException e){
             log.error("Unique key constraint error");
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Your couldn't updated right now. Try later..");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("We couldn't operate this request right now.Please try again later.");
         }
     }
 
     @PutMapping("/notification")
     public ResponseEntity<?> registerNotification(Principal principal, @RequestBody PreferenceModel requestBody)  {
+        //TODO mark missed notifications as notified.
         return ResponseEntity.ok("Your preferences updated.");
     }
 

@@ -1,6 +1,6 @@
 package com.isaes.whocalled.repository;
 
-import com.isaes.whocalled.model.doa.User;
+import com.isaes.whocalled.model.dao.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

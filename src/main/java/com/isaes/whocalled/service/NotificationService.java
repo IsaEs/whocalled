@@ -12,7 +12,7 @@ import java.util.HashMap;
 @Data
 @Slf4j
 @Service
-public class NotificationService {
+public class NotificationService implements INotificationService {
     private static final String WS_MESSAGE_TRANSFER_DESTINATION = "/queue/notifications";
     private final SimpMessagingTemplate simpMessagingTemplate;
     // Sake of simplicity I will keep open sessions in this hashmap. I understand this is not a proper implementation and
@@ -38,7 +38,7 @@ public class NotificationService {
     }
 
     public void sendNotification(String phoneNumber, Notification notification) {
-        sendNotification(findActiveSession(phoneNumber),(Object) notification);
+        sendNotification(findOnlineUser(phoneNumber),(Object) notification);
     }
 
     public void sendNotificationWithPrincipleId(String principleId, Notification notification) {
@@ -51,25 +51,12 @@ public class NotificationService {
         inverseActiveSessionMap.put(randomPrincipalName,phone);
     }
 
-    //We will use phone number as user name and unique identifier to obtain principal.
-    public String findActiveSession(String phoneNumber){
-        String randomPrincipalName = activeSessionMap.get(phoneNumber);
-        if (null != randomPrincipalName){
-            return randomPrincipalName;
-        }else {
-            log.error("No active session found!");
-            return "";
-        }
+    public String findOnlineUser(String phoneNumber){
+        return activeSessionMap.get(phoneNumber);
     }
 
-    public String findActiveSessionByPrincipleName(String randomPrincipalName){
-        String phoneNumber = inverseActiveSessionMap.get(randomPrincipalName);
-        if (null != phoneNumber){
-            return phoneNumber;
-        }else {
-            log.error("No active session found!");
-            return "";
-        }
+    public String findOnlineUserByPrincipalName(String principalName){
+      return inverseActiveSessionMap.get(principalName);
     }
 
 }

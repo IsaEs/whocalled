@@ -1,7 +1,7 @@
 package com.isaes.whocalled.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.isaes.whocalled.model.doa.User;
+import com.isaes.whocalled.model.dao.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;

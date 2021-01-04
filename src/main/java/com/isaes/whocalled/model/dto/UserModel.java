@@ -12,9 +12,4 @@ public class UserModel implements Serializable {
 	private String password;
 	private Boolean notification;
 	private String language;
-	public UserModel() {}
-	public UserModel(String phoneNo, String password) {
-		this.setPhoneNo(phoneNo);
-		this.setPassword(password);
-	}
 }

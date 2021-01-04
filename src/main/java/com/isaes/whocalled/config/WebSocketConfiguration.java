@@ -1,6 +1,7 @@
 package com.isaes.whocalled.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -24,6 +25,11 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
                 .setHandshakeHandler(new DeterminePrincipalHandshakeHandler())
                 .withSockJS();
 
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new FilterChannelInterceptor());
     }
 
 }

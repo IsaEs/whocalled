@@ -1,4 +1,4 @@
-package com.isaes.whocalled.model.doa;
+package com.isaes.whocalled.model.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;

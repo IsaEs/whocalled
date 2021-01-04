@@ -13,6 +13,7 @@
     enabled. Please enable
     Javascript and reload this page!</h2></noscript>
 <div id="main-content" class="container">
+    <h1 class="my-3 text-center">Who Called Service</h1>
     <div>
         <form id="login-form" class="row form-inline">
             <div class="form-group">
@@ -24,28 +25,6 @@
             <button id="login"  class="btn btn-success" type="submit">Submit</button>
         </form>
     </div>
-<!--    <hr style="border-top: 1px solid red;" />-->
-<!--    <div class="row">-->
-<!--        <div class="col-md-6">-->
-<!--            <form class="form-inline">-->
-<!--                <div class="form-group">-->
-<!--                    <label for="connect">WebSocket connection:</label>-->
-<!--                    <button id="connect" class="btn btn-default" type="submit">Connect</button>-->
-<!--                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--        <div class="col-md-6">-->
-<!--            <form class="form-inline">-->
-<!--                <div class="form-group">-->
-<!--                    <label for="phone">Phone number:</label>-->
-<!--                    <input type="text" id="phone" class="form-control" placeholder="Phone number">-->
-<!--                </div>-->
-<!--                <button id="send" class="btn btn-default" type="submit">Register</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
     <hr style="border-top: 1px solid red;" />
     <div class="row">
         <p>Call someone over websocket.</p>
@@ -61,7 +40,7 @@
     </div>
     <hr style="border-top: 1px solid red;" />
     <div class="row">
-        <p>Call someone over rest.</p>
+        <p>Call someone over rest (This will write missed calls).</p>
         <div class="col-md-12">
             <form id="call-over-rest" class="form-inline">
                 <div class="form-group">

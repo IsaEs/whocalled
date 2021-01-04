@@ -1,7 +1,7 @@
 package com.isaes.whocalled.service;
 
 import com.isaes.whocalled.repository.UserRepository;
-import com.isaes.whocalled.model.doa.User;
+import com.isaes.whocalled.model.dao.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,11 +1,13 @@
 package com.isaes.whocalled.model;
 
-import com.isaes.whocalled.model.doa.CallDetailRecord;
+import com.isaes.whocalled.model.dao.CallDetailRecord;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,17 +35,18 @@ public class Notification {
 
     public static class Builder{
         private String message = null;
-        private String atTime;
+        private Date atTime;
         private String msisdn;
         private String lang = "en";
         private List<CallDetailRecord> missedCalls;
+        private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM hh:mm");
 
         public Builder(){}
         public Builder(String message){
             this.message= message;
         }
 
-        public Builder atTime(String atTime){
+        public Builder atTime(Date atTime){
             this.atTime = atTime;
             return this;
         }
@@ -66,7 +69,7 @@ public class Notification {
 
         public Notification buildAvailabilityNotification(){
             Notification notification = new Notification();
-            String message = String.format("The number you have been called %s at %s is available now.",msisdn,atTime);
+            String message = String.format("The number you have been called %s at %s is available now.",msisdn,dF(atTime));
             notification.setMessage(message);
             notification.setLanguage(lang);
             return notification;
@@ -79,7 +82,7 @@ public class Notification {
              List<Long> notificationIds = new ArrayList<>();
             missedCalls.forEach(call->{
                 notificationIds.add(call.getId());
-                missedOnes.append(String.format("%s call at %s - (%s) \n",call.getCallerNo(),call.getLastCallTime(),call.getNumberOfRings()));
+                missedOnes.append(String.format("%s call at %s - (%s) \n",call.getCallerNo(),dF(call.getLastCallTime()),call.getNumberOfRings()));
             });
             log.info(missedOnes.toString());
             notification.setMessage(missedOnes.toString());
@@ -93,6 +96,10 @@ public class Notification {
             notification.setMessage(message);
             notification.setLanguage(lang);
             return notification;
+        }
+
+        private String dF(Date date){
+            return dateFormat.format(date);
         }
     }
 

@@ -2,13 +2,12 @@ package com.isaes.whocalled.controller;
 
 import com.isaes.whocalled.model.dto.JwtTokenModel;
 import com.isaes.whocalled.model.dto.UserModel;
-import com.isaes.whocalled.model.doa.User;
+import com.isaes.whocalled.model.dao.User;
 import com.isaes.whocalled.repository.UserRepository;
 import com.isaes.whocalled.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,12 +30,15 @@ import static com.isaes.whocalled.config.security.SecurityConstants.SECRET;
 @RequestMapping(path="/api")
 public class AuthenticationController {
 
-	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
-	@Autowired
-	private PasswordEncoder bcryptEncoder;
-	@Autowired
-	private UserRepository userRepository;
+	private final UserDetailsServiceImpl userDetailsService;
+	private final PasswordEncoder bcryptEncoder;
+	private final UserRepository userRepository;
+
+	public AuthenticationController(UserDetailsServiceImpl userDetailsService, PasswordEncoder bcryptEncoder, UserRepository userRepository) {
+		this.userDetailsService = userDetailsService;
+		this.bcryptEncoder = bcryptEncoder;
+		this.userRepository = userRepository;
+	}
 
 	@RequestMapping(value = "/signin", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody UserModel user) throws Exception {

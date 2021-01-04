@@ -15,7 +15,7 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('/wsocket');
+    var socket = new SockJS(`/wsocket?token=${jwtToken}`);
     stompClient = Stomp.over(socket);
     var loginToken = 'Bearer ' + jwtToken;
     console.log(loginToken);
@@ -48,11 +48,9 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-//JSON.stringify({'name': $("#name").val()}));
 function registerForNotification() {
-    console.log("Register for notification...")
+    console.log("Check for notification...")
     stompClient.send("/app/register",{'phone': $( "#username" ).val()},'');
-    sCallElemens(false)
 }
 
 function callNumber() {
@@ -68,8 +66,6 @@ function disableOrEnableForms(conn){
     $("#call-over-rest :input").prop( "disabled", conn );
     $("#login-form :input").prop( "disabled", !conn );
 }
-
-
 
 
 function login(){
@@ -93,6 +89,32 @@ function login(){
     });
 }
 
+function sendMissedCalls(){
+    console.log("Send Missed Calls...")
+    $.ajax({
+        type: "POST",
+        url: '/api/user/ring',
+        contentType: "application/json",
+        dataType : "json",
+        headers: {
+            "Authorization": `Bearer ${jwtToken}`
+        },
+        data: JSON.stringify({
+            dialedNumber: $("#dialed-rest").val(),
+            numberOfRings: $("#ringtime").val(),
+            lastCallTime: new Date().toJSON()
+        }),
+        success: function(data) {
+            showNotification(JSON.stringify(data));
+        },
+        error: function (err){
+            alert(err);
+        }
+    });
+}
+
+
+
 $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
@@ -104,5 +126,6 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { registerForNotification(); });
     $( "#call" ).click(function() { callNumber(); });
+    $( "#call-rest" ).click(function() { sendMissedCalls(); });
     $( "#login" ).click(function() { login(); });
 });
